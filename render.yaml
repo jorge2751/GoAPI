@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: go-hello-api
+    env: go
+    buildCommand: go build -o app ./cmd/api
+    startCommand: ./app
+    envVars:
+      - key: PORT
+        value: 10000
