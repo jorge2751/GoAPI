@@ -40,7 +40,7 @@ As you complete tasks and reference relevant files, update this file as our memo
 ### Deployment to Render
 - [ ] Create Render account (if needed)
 - [x] Create a new Web Service on Render
-- [ ] Connect GitHub repository
+- [x] Connect GitHub repository
 - [x] Configure build and start commands
 - [x] Set environment variables if needed
 - [ ] Deploy and verify the API is working in production
