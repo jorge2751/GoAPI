@@ -10,6 +10,7 @@ This is a simple REST API built with Go's standard library that:
 - Handles errors appropriately
 - Can be configured via environment variables
 - Has been set up for deployment on Render
+- Features request logging middleware
 
 ## Project Structure
 
@@ -210,6 +211,41 @@ The `os.Getenv()` function retrieves environment variables, which is a common wa
 
 ### 5. Testing
 Go has built-in testing support via the `testing` package and `go test` command.
+
+### 6. Middleware Pattern
+The middleware pattern is implemented to add request logging functionality. This demonstrates:
+- Function wrapping with closures
+- HTTP handler chaining
+- Custom ResponseWriter implementation
+- Time measurement for performance tracking
+
+Our logging middleware captures:
+- HTTP method and URL path
+- Response status code
+- Request processing duration
+
+```go
+// Example of our logging middleware implementation
+func loggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        startTime := time.Now()
+        
+        crw := &customResponseWriter{
+            ResponseWriter: w,
+            statusCode:     http.StatusOK,
+        }
+        
+        log.Printf("Request: %s %s", r.Method, r.URL.Path)
+        
+        next(crw, r)
+        
+        duration := time.Since(startTime)
+        
+        log.Printf("Response: %s %s - Status: %d - Duration: %v", 
+            r.Method, r.URL.Path, crw.statusCode, duration)
+    }
+}
+```
 
 ## Deployment
 

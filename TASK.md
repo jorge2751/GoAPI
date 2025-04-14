@@ -46,7 +46,7 @@ As you complete tasks and reference relevant files, update this file as our memo
 - [ ] Deploy and verify the API is working in production
 
 ### Optional Enhancements
-- [ ] Add middleware for request logging
+- [x] Add middleware for request logging
 - [ ] Implement graceful shutdown
 - [ ] Add input validation
 - [ ] Set up CI/CD with GitHub Actions
