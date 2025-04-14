@@ -163,6 +163,37 @@ Expected response:
 {"message":"Hello World from Go API!"}
 ```
 
+## Accessing the Deployed API
+
+The API is deployed and accessible at https://goapi-idtt.onrender.com. You can interact with it using the following methods:
+
+### Using curl
+
+To access the hello_world endpoint with curl:
+
+```
+curl https://goapi-idtt.onrender.com/hello_world
+```
+
+This will return the JSON response:
+
+```json
+{"message":"Hello World from Go API!"}
+```
+
+You can also use curl with additional options to see more details:
+
+```
+# View headers
+curl -i https://goapi-idtt.onrender.com/hello_world
+
+# Format the JSON output nicely (if you have jq installed)
+curl https://goapi-idtt.onrender.com/hello_world | jq
+
+# Make a verbose request to see the full HTTP transaction
+curl -v https://goapi-idtt.onrender.com/hello_world
+```
+
 ## Go Concepts Used in This Project
 
 ### 1. HTTP Server
