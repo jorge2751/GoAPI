@@ -34,7 +34,7 @@ As you complete tasks and reference relevant files, update this file as our memo
 ### GitHub Setup
 - [x] Initialize git repository
 - [x] Create .gitignore file for Go
-- [ ] Make initial commit
+- [x] Make initial commit
 - [ ] Push to GitHub
 
 ### Deployment to Render
