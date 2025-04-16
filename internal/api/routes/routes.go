@@ -32,4 +32,5 @@ func HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 func RegisterRoutes(mux *http.ServeMux, middleware func(http.HandlerFunc) http.HandlerFunc) {
 	// Register routes with middleware
 	mux.HandleFunc("/hello_world", middleware(HelloWorldHandler))
+	mux.HandleFunc("/quotes/random", middleware(RandomQuoteHandler))
 }
