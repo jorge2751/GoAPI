@@ -1,10 +1,12 @@
-package main
+package test
 
 import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/jorge2751/go-hello-api/internal/api/routes"
 )
 
 func TestHelloWorldHandler(t *testing.T) {
@@ -16,7 +18,7 @@ func TestHelloWorldHandler(t *testing.T) {
 
 	// Create a ResponseRecorder to record the response
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(helloWorldHandler)
+	handler := http.HandlerFunc(routes.HelloWorldHandler)
 
 	// Call the handler with our request and response recorder
 	handler.ServeHTTP(rr, req)
@@ -35,7 +37,7 @@ func TestHelloWorldHandler(t *testing.T) {
 	}
 
 	// Check the response body
-	var response Response
+	var response routes.Response
 	err = json.NewDecoder(rr.Body).Decode(&response)
 	if err != nil {
 		t.Errorf("Failed to decode response body: %v", err)
@@ -47,4 +49,4 @@ func TestHelloWorldHandler(t *testing.T) {
 		t.Errorf("handler returned unexpected message: got %v want %v",
 			response.Message, expectedMessage)
 	}
-} 
+}
