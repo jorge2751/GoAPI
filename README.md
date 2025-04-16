@@ -61,6 +61,22 @@ Returns a random inspirational quote.
 }
 ```
 
+### GET /art
+
+Returns a beautiful ASCII art pattern.
+
+**Response Example:**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "title": "M Pattern",
+    "content": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n... (ASCII art pattern)"
+  }
+}
+```
+
 ## Deployment
 
 This API can be deployed to Render by connecting your GitHub repository and using the following settings:
