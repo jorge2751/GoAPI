@@ -63,27 +63,19 @@ Returns a random inspirational quote.
 
 ### GET /art
 
-Returns a beautiful ASCII art pattern as JSON.
-
-**Response Example:**
-
-```json
-{
-  "status": "success",
-  "data": {
-    "title": "M Pattern",
-    "content": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\nMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n... (ASCII art pattern)"
-  }
-}
-```
-
-### GET /art/text
-
-Returns the ASCII art pattern directly as plain text. This is ideal for viewing in a terminal or browser.
+Returns a beautiful ASCII art pattern directly as plain text, which displays properly in terminal or browser.
 
 **Example Usage:**
 ```
-curl https://goapi-idtt.onrender.com/art/text
+curl https://goapi-idtt.onrender.com/art
+```
+
+**Example Response:**
+```
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+... (ASCII art continues)
 ```
 
 ## Deployment

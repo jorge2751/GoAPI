@@ -34,5 +34,4 @@ func RegisterRoutes(mux *http.ServeMux, middleware func(http.HandlerFunc) http.H
 	mux.HandleFunc("/hello_world", middleware(HelloWorldHandler))
 	mux.HandleFunc("/quotes/random", middleware(RandomQuoteHandler))
 	mux.HandleFunc("/art", middleware(ArtHandler))
-	mux.HandleFunc("/art/text", middleware(ArtTextHandler))
 }
