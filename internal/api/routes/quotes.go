@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/jorge2751/go-hello-api/internal/api/data"
+	"github.com/jorge2751/GoAPI/internal/api/data"
 )
 
 // QuoteResponse is the response structure for quote endpoints

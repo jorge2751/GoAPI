@@ -6,6 +6,7 @@ This document provides a detailed breakdown of our Go API project for someone le
 
 This is a simple REST API built with Go's standard library that:
 - Serves a JSON response at the `/hello_world` endpoint
+- Serves random quotes at the `/quotes/random` endpoint
 - Uses proper HTTP status codes and content types
 - Handles errors appropriately
 - Can be configured via environment variables
@@ -15,12 +16,22 @@ This is a simple REST API built with Go's standard library that:
 ## Project Structure
 
 ```
-go-hello-api/
+GoAPI/
 ├── cmd/
 │   └── api/
-│       ├── main.go         # Application entry point
-│       └── main_test.go    # Tests for the API
+│       └── main.go         # Application entry point
 ├── internal/               # Private application code
+│   └── api/
+│       ├── data/           # Data models and services
+│       │   └── quotes.go   # Quote data service
+│       ├── middleware/     # HTTP middleware
+│       │   └── logging.go  # Logging middleware
+│       └── routes/         # HTTP route handlers
+│           ├── routes.go   # Route registration
+│           └── quotes.go   # Quote-related handlers
+├── test/                   # Test files
+│   ├── quotes_test.go      # Tests for quote routes
+│   └── routes_test.go      # Tests for hello world route
 ├── pkg/                    # Public libraries
 ├── .gitignore              # Git ignore file
 ├── go.mod                  # Go module definition
@@ -47,12 +58,12 @@ Here are the steps used to set up the Go environment:
 
 3. **Initialize Go Module**:
    ```
-   go mod init github.com/jorgeleon/go-hello-api
+   go mod init github.com/jorge2751/GoAPI
    ```
 
 4. **Create Project Structure**:
    ```
-   mkdir -p cmd/api pkg internal
+   mkdir -p cmd/api pkg internal test
    ```
 
 ## API Implementation Breakdown
@@ -70,8 +81,8 @@ func main() {
     // Define HTTP server
     mux := http.NewServeMux()
 
-    // Register routes
-    mux.HandleFunc("/hello_world", helloWorldHandler)
+    // Register routes with middleware
+    routes.RegisterRoutes(mux, middleware.LoggingMiddleware)
 
     // Start server
     addr := fmt.Sprintf(":%s", port)
@@ -83,13 +94,15 @@ func main() {
 This main function:
 1. Checks for a PORT environment variable, defaulting to "8080" if not set
 2. Creates a new HTTP server multiplexer (router) with `http.NewServeMux()`
-3. Registers the `/hello_world` route with its handler function
+3. Registers the routes with the logging middleware
 4. Starts the HTTP server with the configured port
 
-### Handler Function
+### Handler Functions
+
+#### Hello World Handler
 
 ```go
-func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
+func HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
     // Set content type
     w.Header().Set("Content-Type", "application/json")
     
@@ -107,44 +120,83 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-This handler function:
-1. Sets the response content type to "application/json"
-2. Creates a Response struct with a message
-3. Encodes the struct as JSON and writes it to the response
-4. Handles any encoding errors
-
-### Response Structure
+#### Random Quote Handler
 
 ```go
-// Response represents the API response structure
-type Response struct {
-    Message string `json:"message"`
+func RandomQuoteHandler(w http.ResponseWriter, r *http.Request) {
+    // Set content type
+    w.Header().Set("Content-Type", "application/json")
+
+    // Create a new quote service
+    quoteService := data.NewQuoteService()
+    
+    // Get a random quote
+    randomQuote := quoteService.GetRandomQuote()
+
+    // Create response
+    response := QuoteResponse{
+        Status: "success",
+        Data:   randomQuote,
+    }
+
+    // Encode and send response
+    err := json.NewEncoder(w).Encode(response)
+    if err != nil {
+        http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+        return
+    }
 }
 ```
 
-This struct:
-1. Defines the structure of our JSON response
-2. Uses a struct tag (`json:"message"`) to specify the JSON field name
+These handlers:
+1. Set the response content type to "application/json"
+2. Create the appropriate response structures
+3. Encode the structs as JSON and write them to the response
+4. Handle any encoding errors
+
+### Response Structures
+
+```go
+// Response represents the API response structure for hello world endpoint
+type Response struct {
+    Message string `json:"message"`
+}
+
+// Quote represents a quote with its text and author
+type Quote struct {
+    Text   string `json:"text"`
+    Author string `json:"author"`
+}
+
+// QuoteResponse is the response structure for quote endpoints
+type QuoteResponse struct {
+    Status string `json:"status"`
+    Data   Quote  `json:"data"`
+}
+```
+
+These structs:
+1. Define the structure of our JSON responses
+2. Use struct tags (`json:"field"`) to specify the JSON field names
 3. Will be automatically marshaled to JSON when using `json.NewEncoder().Encode()`
 
 ## Testing
 
 ### Unit Tests
 
-The project includes a unit test for the `helloWorldHandler` function in `main_test.go`. This test:
-1. Creates a fake HTTP request
-2. Records the response using `httptest.NewRecorder()`
-3. Verifies the response status code, content type, and body
+The project includes unit tests for all handlers in the `test` directory. These tests:
+1. Create fake HTTP requests
+2. Record the responses using `httptest.NewRecorder()`
+3. Verify the response status codes, content types, and bodies
 
 To run the tests:
 ```
-cd cmd/api
-go test
+go test ./test
 ```
 
 For verbose output:
 ```
-go test -v
+go test -v ./test
 ```
 
 ### Manual Testing
@@ -157,11 +209,22 @@ go run cmd/api/main.go
 
 # In another terminal
 curl http://localhost:8080/hello_world
+curl http://localhost:8080/quotes/random
 ```
 
-Expected response:
+Expected responses:
 ```json
 {"message":"Hello World from Go API!"}
+```
+
+```json
+{
+  "status": "success",
+  "data": {
+    "text": "Life is what happens when you're busy making other plans.",
+    "author": "John Lennon"
+  }
+}
 ```
 
 ## Accessing the Deployed API
@@ -170,26 +233,18 @@ The API is deployed and accessible at https://goapi-idtt.onrender.com. You can i
 
 ### Using curl
 
-To access the hello_world endpoint with curl:
+To access the endpoints with curl:
 
 ```
 curl https://goapi-idtt.onrender.com/hello_world
-```
-
-This will return the JSON response:
-
-```json
-{"message":"Hello World from Go API!"}
+curl https://goapi-idtt.onrender.com/quotes/random
 ```
 
 You can also use curl with additional options to see more details:
 
 ```
-# View headers
-curl -i https://goapi-idtt.onrender.com/hello_world
-
 # Format the JSON output nicely (if you have jq installed)
-curl https://goapi-idtt.onrender.com/hello_world | jq
+curl https://goapi-idtt.onrender.com/quotes/random | jq
 
 # Make a verbose request to see the full HTTP transaction
 curl -v https://goapi-idtt.onrender.com/hello_world
@@ -226,7 +281,7 @@ Our logging middleware captures:
 
 ```go
 // Example of our logging middleware implementation
-func loggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func LoggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
         startTime := time.Now()
         
@@ -247,6 +302,13 @@ func loggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
 }
 ```
 
+### 7. Package Organization
+Go encourages organizing code into packages:
+- `internal`: Private code that can't be imported by other modules
+- `cmd`: Entry points for applications
+- `pkg`: Library code that can be imported by other modules
+- `test`: Dedicated test files
+
 ## Deployment
 
 The project is configured for deployment on Render using the `render.yaml` file:
@@ -254,7 +316,7 @@ The project is configured for deployment on Render using the `render.yaml` file:
 ```yaml
 services:
   - type: web
-    name: go-hello-api
+    name: GoAPI
     env: go
     buildCommand: go build -o app ./cmd/api
     startCommand: ./app
@@ -272,8 +334,8 @@ This configuration tells Render:
 ## Next Steps
 
 To improve this API, consider:
-1. Adding middleware for logging
-2. Implementing graceful shutdown
-3. Adding more endpoints with different functionality
-4. Using a router package like gorilla/mux or a framework like Gin
-5. Adding a database connection
+1. Implementing graceful shutdown
+2. Adding more endpoints with different functionality
+3. Using a router package like gorilla/mux or a framework like Gin
+4. Adding a database connection
+5. Adding authentication

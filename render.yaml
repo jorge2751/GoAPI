@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: go-hello-api
+    name: GoAPI
     env: go
     buildCommand: go build -o app ./cmd/api
     startCommand: ./app

@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/jorge2751/go-hello-api/internal/api/routes"
+	"github.com/jorge2751/GoAPI/internal/api/routes"
 )
 
 func TestRandomQuoteHandler(t *testing.T) {

@@ -20,8 +20,8 @@ A simple Go API that returns a hello world message at the `/hello_world` endpoin
 
 1. Clone the repository:
    ```
-   git clone https://github.com/[your-username]/go-hello-api.git
-   cd go-hello-api
+   git clone https://github.com/[your-username]/GoAPI.git
+   cd GoAPI
    ```
 
 2. Run the application:
@@ -45,6 +45,22 @@ Returns a hello world message in JSON format.
 }
 ```
 
+### GET /quotes/random
+
+Returns a random inspirational quote.
+
+**Response Example:**
+
+```json
+{
+  "status": "success",
+  "data": {
+    "text": "The way to get started is to quit talking and begin doing.",
+    "author": "Walt Disney"
+  }
+}
+```
+
 ## Deployment
 
 This API can be deployed to Render by connecting your GitHub repository and using the following settings:
@@ -60,6 +76,7 @@ This project follows the standard Go project layout:
 - `cmd/api`: Application entry point
 - `internal`: Private application code
 - `pkg`: Public libraries that can be used by external applications
+- `test`: Test files for the application
 
 ## License
 

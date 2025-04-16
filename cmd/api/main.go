@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/jorge2751/go-hello-api/internal/api/middleware"
-	"github.com/jorge2751/go-hello-api/internal/api/routes"
+	"github.com/jorge2751/GoAPI/internal/api/middleware"
+	"github.com/jorge2751/GoAPI/internal/api/routes"
 )
 
 func main() {
