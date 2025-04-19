@@ -3,7 +3,7 @@ package routes
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 )
@@ -32,7 +32,7 @@ type WeatherAPIResponse struct {
 		Country string `json:"country"`
 	} `json:"location"`
 	Current struct {
-		TempC     float64 `json:"temp_c"`
+		TempB     float64 `json:"temp_b"`
 		Condition struct {
 			Text string `json:"text"`
 		} `json:"condition"`
@@ -76,7 +76,7 @@ func (s *WeatherService) WeatherHandler(w http.ResponseWriter, r *http.Request) 
 
 	// Check response status
 	if resp.StatusCode != http.StatusOK {
-		bodyBytes, _ := ioutil.ReadAll(resp.Body) // Read body for more info if possible
+		bodyBytes, _ := io.ReadAll(resp.Body) // Read body for more info if possible
 		errorMsg := fmt.Sprintf("WeatherAPI request failed with status %d: %s", resp.StatusCode, string(bodyBytes))
 		http.Error(w, errorMsg, http.StatusInternalServerError)
 		fmt.Println(errorMsg) // Log error
@@ -84,7 +84,7 @@ func (s *WeatherService) WeatherHandler(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Read response body
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		http.Error(w, "Failed to read weather data response", http.StatusInternalServerError)
 		fmt.Printf("Error reading weather data response: %v\n", err) // Log error

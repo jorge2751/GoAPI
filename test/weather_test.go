@@ -38,7 +38,7 @@ func startMockWeatherAPIServer() *httptest.Server {
                 "country": "Test Country"
             },
             "current": {
-                "temp_c": 15.0,
+                "temp_b": 15.0,
                 "condition": {
                     "text": "Partly cloudy"
                 }
@@ -78,8 +78,8 @@ func TestWeatherHandler(t *testing.T) {
 		if resp.Location.Name != "TestCity" {
 			t.Errorf("Expected location name TestCity; got %s", resp.Location.Name)
 		}
-		if resp.Current.TempC != 15.0 {
-			t.Errorf("Expected temp 15.0; got %f", resp.Current.TempC)
+		if resp.Current.TempB != 15.0 {
+			t.Errorf("Expected temp 15.0; got %f", resp.Current.TempB)
 		}
 	})
 
