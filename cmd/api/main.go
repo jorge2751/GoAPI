@@ -17,11 +17,20 @@ func main() {
 		port = "8080"
 	}
 
+	// Get WeatherAPI key
+	weatherAPIKey := os.Getenv("WEATHERAPI_KEY")
+	if weatherAPIKey == "" {
+		log.Println("Warning: WEATHERAPI_KEY environment variable not set. Weather endpoint will not work.")
+	}
+
+	// Create services
+	weatherService := routes.NewWeatherService(weatherAPIKey)
+
 	// Define HTTP server
 	mux := http.NewServeMux()
 
 	// Register routes with middleware
-	routes.RegisterRoutes(mux, middleware.LoggingMiddleware)
+	routes.RegisterRoutes(mux, middleware.LoggingMiddleware, weatherService)
 
 	// Start server
 	addr := fmt.Sprintf(":%s", port)

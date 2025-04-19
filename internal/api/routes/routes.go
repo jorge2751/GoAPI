@@ -29,9 +29,10 @@ func HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // RegisterRoutes sets up all API routes with the given mux
-func RegisterRoutes(mux *http.ServeMux, middleware func(http.HandlerFunc) http.HandlerFunc) {
+func RegisterRoutes(mux *http.ServeMux, middleware func(http.HandlerFunc) http.HandlerFunc, weatherService *WeatherService) {
 	// Register routes with middleware
 	mux.HandleFunc("/hello_world", middleware(HelloWorldHandler))
 	mux.HandleFunc("/quotes/random", middleware(RandomQuoteHandler))
 	mux.HandleFunc("/art", middleware(ArtHandler))
+	mux.HandleFunc("/weather", middleware(weatherService.WeatherHandler))
 }
