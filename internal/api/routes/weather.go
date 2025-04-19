@@ -32,7 +32,7 @@ type WeatherAPIResponse struct {
 		Country string `json:"country"`
 	} `json:"location"`
 	Current struct {
-		TempB     float64 `json:"temp_b"`
+		TempF     float64 `json:"temp_f"`
 		Condition struct {
 			Text string `json:"text"`
 		} `json:"condition"`

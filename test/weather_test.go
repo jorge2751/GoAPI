@@ -78,8 +78,8 @@ func TestWeatherHandler(t *testing.T) {
 		if resp.Location.Name != "TestCity" {
 			t.Errorf("Expected location name TestCity; got %s", resp.Location.Name)
 		}
-		if resp.Current.TempB != 15.0 {
-			t.Errorf("Expected temp 15.0; got %f", resp.Current.TempB)
+		if resp.Current.TempF != 15.0 {
+			t.Errorf("Expected temp 15.0; got %f", resp.Current.TempF)
 		}
 	})
 
